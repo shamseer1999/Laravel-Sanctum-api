@@ -21,5 +21,6 @@ use App\Models\Car;
 Route::middleware('auth:sanctum')->group(function () {
     // return $request->user();
     Route::post('cars-collection',[ApiController::class,'cars_collection']);
+    Route::post('log-out',[ApiController::class,'logout']);
 });
 Route::post('login',[ApiController::class,'login']);

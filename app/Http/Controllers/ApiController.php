@@ -58,12 +58,28 @@ class ApiController extends Controller
         {
 
             $carsCollection=Car::where('user_id',$user_id)->get();
-            $out=array(
-                'status' =>200,
-                'data' =>$carsCollection,
-                'message' =>'Cars listed successfully'
-            );
-            return response()->json($out);
+            //return $carsCollection;
+            if($carsCollection->isNotEmpty())
+            {
+
+                $out=array(
+                    'status' =>200,
+                    'data' =>$carsCollection,
+                    'message' =>'User cars listed successfully'
+                );
+                return response()->json($out);
+            }
+            else
+            {
+
+                $out=array(
+                    'status' =>204,
+                    'data' =>'',
+                    'message' =>"This user doesn't have a car collection"
+                );
+                return response()->json($out);
+            }
+            
         }
         else
         {
@@ -76,4 +92,22 @@ class ApiController extends Controller
         }
         
     }
+
+    //User logout
+    public function logout()
+    {
+
+        $user_id=auth()->user()->id;
+        $user=User::find($user_id);
+
+        //Delete user token
+        $user->tokens()->delete();
+
+        $out=array(
+            'status' =>200,
+            'message' =>'User logout successfully'
+        );
+        return response()->json($out);
+    }
+
 }
